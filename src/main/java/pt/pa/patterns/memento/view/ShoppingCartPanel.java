@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority;
 import pt.pa.patterns.memento.model.Product;
 import pt.pa.patterns.memento.model.ShoppingCartController;
 
-import static jdk.internal.agent.Agent.error;
 
 public class ShoppingCartPanel {
 
@@ -82,7 +81,7 @@ public class ShoppingCartPanel {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (textFieldProductName.getText().isEmpty() || textFieldPrice.getText().isEmpty()) {
-                    error("Missing product information.");
+                    showError("Missing product information.");
                 } else {
                     try {
                         String name = textFieldProductName.getText();
