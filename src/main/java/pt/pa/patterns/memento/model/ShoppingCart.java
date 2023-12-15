@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-public class ShoppingCart{
+public class ShoppingCart implements Originator{
     private List<Product> products;
 
     public ShoppingCart() {
@@ -41,5 +41,29 @@ public class ShoppingCart{
         return String.valueOf(products);
     }
 
+    @Override
+    public Memento createMemento(){
+        return new ShoppingCartMemento(new ArrayList<>(products));
+    }
+
+    @Override
+    public void setMemento(Memento savedState){
+        if(savedState instanceof  ShoppingCartMemento){
+            products = new ArrayList<>(((ShoppingCartMemento) savedState).getProducts());
+        }
+    }
+
+    private static class ShoppingCartMemento implements Memento{
+        private final List<Product> products;
+
+        public ShoppingCartMemento(List<Product> products){
+            this.products = products;
+        }
+
+        public List<Product> getProducts(){return products;}
+
+        @Override
+        public String getDescription(){return null;}
+    }
 
 }

@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import pt.pa.patterns.memento.model.NoMementoException;
 import pt.pa.patterns.memento.model.Product;
 import pt.pa.patterns.memento.model.ShoppingCartController;
 
@@ -17,6 +18,8 @@ public class ShoppingCartPanel {
     private ListView<Product> listViewCartContents;
 
     private   Button buttonUndo;
+
+    private Button buttonReset;
     private GridPane gridPaneMain;
     private Button buttonAddProduct;
     private TextField textFieldProductName;
@@ -66,6 +69,35 @@ public class ShoppingCartPanel {
         hBoxUndo.setStyle("-fx-padding: 2px 0 0 0");
         gridPaneCartContents.add(hBoxUndo, 0, 2);
         GridPane.setHgrow(listViewCartContents, Priority.ALWAYS);
+
+
+        buttonUndo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    shoppingCartController.undo();
+                    updateProductCartList();
+                } catch (NoMementoException e) {
+                    showError("Unable to undo: " + e.getMessage());
+                }
+            }
+        });
+
+        buttonReset = new Button("Reset");
+        HBox hBoxReset = new HBox();
+        hBoxReset.getChildren().add(buttonReset);
+        hBoxReset.setAlignment(Pos.CENTER_RIGHT);
+        hBoxReset.setStyle("-fx-padding: 2px 0 0 10px"); // Ajustando o espaçamento
+        gridPaneCartContents.add(hBoxReset, 1, 2);
+        GridPane.setHgrow(listViewCartContents, Priority.ALWAYS);
+
+        buttonReset.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                shoppingCartController.reset();
+                updateProductCartList();
+            }
+        });
 
         setTriggers();
 
